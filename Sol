@@ -1,6 +1,132 @@
+import java.util.ArrayList;
+import java.util.ListIterator;
+public class shoppingc {
+	class ShoppingCart {
+		ArrayList<Item> item;
+		double totalAmount;
+		double payableAmount;
+		double discount;
+		double tax;
+		double gst;
+		ShoppingCart() {
+			this.item = new ArrayList<Item>();
+			this.gst = 0;
+			this.totalAmount = 0;
+			this.payableAmount = 0;
+			this.discount = 0;
+		}
+		public void addToCart(Item item) {
+			this.item.add(item);
+		}
+		public void showCart() {
+			ListIterator<Item> iterator = item.listIterator();
+			while(iterator.hasNext()) {
+				Item item1 = iterator.next();
+				System.out.println(item1);
+			}
+		}
+		public void removeFromCart(Item i) {
+			ListIterator<Item> iterator1 = item.listIterator();
+			while(iterator1.hasNext()) {
+				Item item2 = iterator1.next();
+				if (item2.getProductName().equals(i.getProductName())) {
+					this.item.remove(i);
+					break;
+				}
+			}
+		}
+		public double getTotalAmount() {
+			ListIterator<Item> iterator2 = item.listIterator();
+			this.totalAmount = 0;
+			while(iterator2.hasNext()) {
+				Item item3 = iterator2.next();
+				this.totalAmount = this.totalAmount + (item3.getUnitPrice() * item3.getQuantity());
+			}
+			if (totalAmount>=500) {
+				this.discount = this.getTotalAmount() * (gst);
+				this.totalAmount = this.totalAmount - this.discount;
+			} else {
+				this.totalAmount = this.totalAmount;
+		}
+			return this.totalAmount;
+		}
+		public double getGST(double gst) {
+			this.gst=gst;
+			int amt= (int) (this.totalAmount*(gst/100));
+			return amt;
+			}
+		public double getPayableAmount() {
+			this.payableAmount = 0;
+			this.payableAmount = this.totalAmount + this.gst;
+			return this.payableAmount;
+		}
+		public void printInvoice() {
+			ListIterator<Item> iterator3 = item.listIterator();
+			while(iterator3.hasNext()) {
+				Item item4 = iterator3.next();
+				System.out.print(item4.getProductName() + "\t");
+				System.out.print(item4.getQuantity() + "\t");
+				System.out.print(item4.getUnitPrice() + "\t");
+				System.out.println(item4.getUnitPrice() * item4.getQuantity());
+			}
+			System.out.println("\t\t\t" + "Total    : " + this.getTotalAmount());
+			this.getGST(this.gst);
+			System.out.println("\t\t\t" + "GST : " + this.gst);
+			this.getPayableAmount();
+			System.out.println("\t\t\t" + "Total    : " + this.getPayableAmount());
+		}
+	}
+	class ShoppingcartTest {
+		  public static void main(String[] args)
+		  {
+			
+		    Item i1 = new Item("Leather wallet", 1100, 18,1);
+		    Item i2 = new Item("Umbrella", 900, 12,4);
+		    Item i3 = new Item("Cigarette", 200, 28, 3);
+		    Item i4 = new Item("Honey", 100, 0, 2);
+		    ShoppingCart cart = new ShoppingCart();
+		    cart.addToCart(i1);
+		    cart.addToCart(i2);
+		    cart.addToCart(i3);
+		    cart.addToCart(i4);
+		    
+		    cart.showCart();
+		    
 
-public class Test
-{public  static void main (String [] args) {
-System.out.println("hello world");
-}
+		    double totalAmount = cart.getTotalAmount();
+		    System.out.println(totalAmount);
+
+		    double payableAmount = cart.getPayableAmount();
+		    System.out.println(payableAmount);    
+		    
+		    cart.printInvoice();
+		  }
+	}
+	class Item {
+		private String productName;
+		private double unitPrice;
+		private float gst;
+		private int quantity;
+		
+		void Item(String productName, double unitPrice, float gst, int quantity) {
+			this.productName = productName;
+			this.unitPrice = unitPrice;
+			this.gst=gst;
+			this.quantity = quantity;	
+		}
+		public String toString() {
+			String s = this.productName + ":";
+			s = s + this.quantity + "\n";
+			return s;
+		}
+		public String getProductName() {
+			return this.productName;
+		}
+		public int getQuantity() {
+			return this.quantity;
+		}
+		public double getUnitPrice() {
+			return this.unitPrice;
+		}
+	}
 }
